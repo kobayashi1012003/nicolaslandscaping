@@ -119,15 +119,21 @@ what a search engine can read.
 
 ## Dev-only scripts
 
-Neither is part of the build.
+None of these are part of the build. All need the dev server running and Chrome
+at the path set at the top of each file.
 
 ```bash
-node scripts/audit.mjs    # horizontal overflow, tap targets, heading order, alt text, at 9 widths
+node scripts/audit.mjs           # overflow, tap targets, heading order, alt text, across 9 widths
+node scripts/interact-check.mjs  # mobile menu, scroll lock, sticky bar, deep links, reduced motion
 node scripts/shots.mjs <outDir> <WxH[,WxH]> <path>   # headless screenshots
 ```
 
-Both need a dev server running and Chrome installed at the path set at the top of
-each file.
+`scripts/fix-export-prefetch.mjs` **is** part of the build (`npm run build` runs
+it after `next build`). It works around a Next 16 static-export bug: the client
+prefetches a route's RSC payload from a dotted path
+(`/services/__next.services.__PAGE__.txt`) but the export writes it into a
+directory (`/services/__next.services/__PAGE__.txt`), so every nested route 404s
+on prefetch. Delete the script once the upstream emit matches the request path.
 
 ## Deploying
 
@@ -146,9 +152,29 @@ host unchanged.
   site or in the structured data.
 - Scroll reveals are server-rendered at `opacity: 0` by Motion, so a `<noscript>`
   rule in `layout.tsx` forces `[data-reveal]` visible when JS does not run.
-  Keep it.
-- The hero clip autoplays muted but has a pause control, stops when scrolled
-  out of view, and is replaced by its poster under `prefers-reduced-motion`.
+  Keep it. `PageTransition` has the same hazard and is gated on `hydrated` for
+  the same reason: passing an `initial` on first load put an inline `opacity: 0`
+  on the whole page and blocked the largest paint for 217ms.
+- **The hero is a still photograph on phones.** A video layered over the poster
+  is a separate paint, so the browser treats its arrival as a new Largest
+  Contentful Paint candidate, which pushed measured LCP past four seconds. It
+  also saved half a megabyte of cellular data. Motion is a larger-screen
+  enhancement; clips further down the page are unaffected.
+- Clips autoplay muted but always have a pause control, stop when scrolled out
+  of view, and are replaced by their poster under `prefers-reduced-motion`.
+- **Fonts are deliberately not preloaded** (`preload: false` in `layout.tsx`).
+  They were being fetched at High priority in the same instant as the hero
+  poster and splitting the connection with it. The LCP element is an image, so
+  the image gets the bandwidth.
+- **One label per action.** "Call (619) 622-1735" and "Text us" everywhere there
+  is room; "Call" / "Text" only in the sticky bar, where two buttons at 360px
+  cannot fit the full labels. Do not introduce a third variant such as
+  "Call now" or "Send a text". On the contact sections the display-size phone
+  number *is* the call link, which is why there is no call button beside it.
+- Anchor offsets come from one place: `scroll-padding-top` on `html` for native
+  scrolling, and Lenis's `anchors.offset` for smooth scrolling. Adding
+  `scroll-mt-*` to sections on top of those stacks a third offset and drops the
+  target 200px down the page.
 
 ---
 

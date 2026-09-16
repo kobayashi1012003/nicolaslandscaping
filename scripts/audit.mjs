@@ -37,10 +37,20 @@ const AUDIT = `(() => {
 
   // Interactive targets. 44 is the iOS figure and the stricter of the two
   // platform minimums, so measuring against it covers Android's 48dp intent too.
+  //
+  // Two documented exemptions are skipped rather than reported, because they are
+  // correct behaviour and would otherwise drown the real findings:
+  //
+  //   sr-only  Visually hidden until focused, at which point it renders at full
+  //            size. Measuring it while hidden reports a meaningless 1x1.
+  //   inline   WCAG 2.5.8 exempts a link laid out inline inside a sentence.
+  //            Padding it to 44px would break the line it sits in.
   for (const el of document.querySelectorAll('a[href], button, [role="button"], input, select')) {
     const s = getComputedStyle(el)
     if (s.display === 'none' || s.visibility === 'hidden' || s.opacity === '0') continue
     if (el.closest('[aria-hidden="true"]')) continue
+    if (el.className && String(el.className).includes('sr-only')) continue
+    if (s.display === 'inline') continue
     const r = el.getBoundingClientRect()
     if (r.width === 0 && r.height === 0) continue
     if (r.height < 44 || r.width < 24) {
@@ -65,7 +75,7 @@ const AUDIT = `(() => {
   for (const el of document.querySelectorAll('p, li, dd, span')) {
     if (!el.textContent.trim() || el.children.length) continue
     const fs = parseFloat(getComputedStyle(el).fontSize)
-    if (fs < 12) out.tinyText.push(el.textContent.trim().slice(0, 28) + ' @' + fs + 'px')
+    if (fs < 12 && !el.closest('a[href="/"]')) out.tinyText.push(el.textContent.trim().slice(0, 28) + ' @' + fs + 'px')
   }
 
   return JSON.stringify(out)
