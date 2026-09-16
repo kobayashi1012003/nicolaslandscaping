@@ -1,0 +1,56 @@
+{
+  "widths": [
+    400,
+    640,
+    900,
+    1080
+  ],
+  "photos": [
+    {
+      "name": "fencing-before",
+      "widths": [
+        400,
+        640,
+        900,
+        1080
+      ]
+    },
+    {
+      "name": "work-border-finished",
+      "widths": [
+        400,
+        640,
+        900,
+        1080
+      ]
+    },
+    {
+      "name": "work-border-progress",
+      "widths": [
+        400,
+        640,
+        900,
+        1080
+      ]
+    },
+    {
+      "name": "work-crew-border",
+      "widths": [
+        400,
+        640,
+        900,
+        1080
+      ]
+    },
+    {
+      "name": "work-gravel-channel",
+      "widths": [
+        400,
+        640,
+        900,
+        1080
+      ]
+    }
+  ],
+  "generated": "2026-09-16T08:53:42.481Z"
+}
