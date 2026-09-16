@@ -55,7 +55,7 @@ export default function ServicesPage() {
               key={service.slug}
               id={service.slug}
               aria-labelledby={`${service.slug}-h`}
-              className={`scroll-mt-28 border-y border-rule ${tinted ? 'bg-paper-alt' : 'bg-paper'}`}
+              className={`border-y border-rule ${tinted ? 'bg-paper-alt' : 'bg-paper'}`}
             >
               <div className="u-shell py-16 md:py-24">
                 <Reveal>
@@ -82,7 +82,7 @@ export default function ServicesPage() {
             key={service.slug}
             id={service.slug}
             aria-labelledby={`${service.slug}-h`}
-            className="u-shell scroll-mt-28 py-16 md:py-24"
+            className="u-shell py-16 md:py-24"
           >
             <div className="grid grid-cols-1 items-center gap-8 md:grid-cols-12 md:gap-12">
               <Reveal

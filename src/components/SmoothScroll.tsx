@@ -89,11 +89,63 @@ export function SmoothScroll({ children }: { children: ReactNode }) {
     }
   }, [])
 
-  // Lenis keeps its own scroll position, so without this a route change lands
-  // mid-page. force is required because scrollTo is ignored while stopped.
+  /**
+   * Scroll position on navigation.
+   *
+   * Lenis keeps its own scroll position, so without a reset here a route change
+   * lands mid-page. `force` is required because scrollTo is ignored while the
+   * instance is stopped.
+   *
+   * The hash branch is not optional. Resetting to zero unconditionally also
+   * cancelled the browser's own jump to a #fragment, which silently broke every
+   * link from the home page services index into /services/#slug: they all landed
+   * at the top of the page instead of on the section.
+   *
+   * The target may not be laid out yet on a fresh navigation, so this retries
+   * across a few frames before giving up, and offsets by the fixed header so the
+   * heading is not left underneath it.
+   */
   useEffect(() => {
-    if (lenisRef.current) lenisRef.current.scrollTo(0, { immediate: true, force: true })
-    else window.scrollTo(0, 0)
+    const hash = window.location.hash
+    let frame = 0
+    let raf = 0
+
+    const headerOffset = () => {
+      const h = getComputedStyle(document.documentElement).getPropertyValue('--header-h')
+      return (parseInt(h, 10) || 64) + 24
+    }
+
+    const toTop = () => {
+      if (lenisRef.current) lenisRef.current.scrollTo(0, { immediate: true, force: true })
+      else window.scrollTo(0, 0)
+    }
+
+    if (!hash) {
+      toTop()
+      return
+    }
+
+    const tryHash = () => {
+      const el = document.querySelector(hash)
+      if (el) {
+        if (lenisRef.current) {
+          lenisRef.current.scrollTo(el as HTMLElement, { offset: 0, force: true })
+        } else {
+          const y = (el as HTMLElement).getBoundingClientRect().top + window.scrollY - headerOffset()
+          window.scrollTo({ top: y })
+        }
+        return
+      }
+      if (frame < 20) {
+        frame += 1
+        raf = requestAnimationFrame(tryHash)
+      } else {
+        toTop()
+      }
+    }
+
+    raf = requestAnimationFrame(tryHash)
+    return () => cancelAnimationFrame(raf)
   }, [pathname])
 
   // On back/forward let the browser restore position, then re-measure so the
