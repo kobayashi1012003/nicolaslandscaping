@@ -161,9 +161,9 @@ async function buildLogo() {
   await mkdir(dir, { recursive: true })
   const src = path.join(SRC, 'logo', 'logo-full.png')
 
-  // Horizontal lockup, supplied by the client. This is what the header and
-  // footer use: the real mark beside the real letterforms, rather than the mark
-  // beside a typeset approximation of the name.
+  // Horizontal lockup, supplied by the client. This is what the header uses:
+  // the real mark beside the real letterforms, rather than the mark beside a
+  // typeset approximation of the name.
   //
   // Trimmed to its ink so the element's box is the artwork, with no invisible
   // padding throwing off alignment. Exported at 1x/2x/3x of the header height
@@ -180,6 +180,20 @@ async function buildLogo() {
   for (const h of [40, 80, 120, 180]) {
     await sharp(lockBuf).resize({ height: h }).png({ compressionLevel: 9 }).toFile(path.join(dir, 'lockup-' + h + '.png'))
     await sharp(lockBuf).resize({ height: h }).webp({ quality: 94 }).toFile(path.join(dir, 'lockup-' + h + '.webp'))
+  }
+
+  // Stacked lockup, also supplied by the client. The footer has vertical room
+  // the header does not, so it shows the mark sitting above the wordmark at a
+  // size where the "LANDSCAPING | LAWN CARE" line is actually readable.
+  const stackBuf = await sharp(src).trim().png().toBuffer()
+  const sm = await sharp(stackBuf).metadata()
+  console.log(
+    '  stacked trimmed to ' + sm.width + 'x' + sm.height +
+    ' (' + (sm.width / sm.height).toFixed(2) + ':1)'
+  )
+  for (const h of [120, 240, 360]) {
+    await sharp(stackBuf).resize({ height: h }).png({ compressionLevel: 9 }).toFile(path.join(dir, 'stacked-' + h + '.png'))
+    await sharp(stackBuf).resize({ height: h }).webp({ quality: 94 }).toFile(path.join(dir, 'stacked-' + h + '.webp'))
   }
 
   // Isolate the mark: take the upper band of the 2000x2000 lockup, above the
