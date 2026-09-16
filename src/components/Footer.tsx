@@ -29,7 +29,7 @@ export function Footer() {
       <div className="u-shell py-14 md:py-16">
         <div className="flex flex-col gap-10 md:flex-row md:items-start md:justify-between">
           <Link href="/" className="-mx-1 flex min-h-11 w-fit items-center rounded-sm px-1">
-            <Logo />
+            <Logo size="footer" />
           </Link>
 
           <div className="grid gap-8 sm:grid-cols-2 md:gap-16">

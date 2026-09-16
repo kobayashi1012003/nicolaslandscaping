@@ -161,6 +161,27 @@ async function buildLogo() {
   await mkdir(dir, { recursive: true })
   const src = path.join(SRC, 'logo', 'logo-full.png')
 
+  // Horizontal lockup, supplied by the client. This is what the header and
+  // footer use: the real mark beside the real letterforms, rather than the mark
+  // beside a typeset approximation of the name.
+  //
+  // Trimmed to its ink so the element's box is the artwork, with no invisible
+  // padding throwing off alignment. Exported at 1x/2x/3x of the header height
+  // because it is small on screen and must stay crisp on dense displays.
+  const lockBuf = await sharp(path.join(SRC, 'logo', 'logo-horizontal.png'))
+    .trim()
+    .png()
+    .toBuffer()
+  const lm = await sharp(lockBuf).metadata()
+  console.log(
+    '  lockup trimmed to ' + lm.width + 'x' + lm.height +
+    ' (' + (lm.width / lm.height).toFixed(2) + ':1)'
+  )
+  for (const h of [40, 80, 120, 180]) {
+    await sharp(lockBuf).resize({ height: h }).png({ compressionLevel: 9 }).toFile(path.join(dir, 'lockup-' + h + '.png'))
+    await sharp(lockBuf).resize({ height: h }).webp({ quality: 94 }).toFile(path.join(dir, 'lockup-' + h + '.webp'))
+  }
+
   // Isolate the mark: take the upper band of the 2000x2000 lockup, above the
   // wordmark, then trim the surrounding transparency so it sits flush.
   //
@@ -175,10 +196,9 @@ async function buildLogo() {
   const m = await sharp(markBuf).metadata()
   console.log('  mark trimmed to ' + m.width + 'x' + m.height)
 
-  for (const h of [48, 96, 144]) {
-    await sharp(markBuf).resize({ height: h }).png({ compressionLevel: 9 }).toFile(path.join(dir, 'mark-' + h + '.png'))
-    await sharp(markBuf).resize({ height: h }).webp({ quality: 92 }).toFile(path.join(dir, 'mark-' + h + '.webp'))
-  }
+  // The mark is no longer exported on its own. The header and footer both use
+  // the horizontal lockup now, so the standalone mark files were shipping
+  // unreferenced. It is still used below, in memory, to build the square icons.
 
   // Square, padded icons for favicon and apple-touch.
   const side = Math.max(m.width, m.height)

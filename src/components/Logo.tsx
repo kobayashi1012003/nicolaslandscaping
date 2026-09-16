@@ -1,52 +1,66 @@
 /**
- * Horizontal lockup: the client's mark, untouched, beside the name set in the
- * site's display face.
+ * The client's horizontal lockup, used as supplied.
  *
- * The supplied logo is a stacked lockup (mark sitting above the wordmark). At a
- * sane header height that renders the wordmark at roughly 20px, which is not the
- * "large logo" the brief asks for. Placing the mark beside typeset text keeps
- * the artwork exactly as drawn while letting the name read at a real size.
+ * An earlier version composed the mark beside the name typeset in Archivo,
+ * because the only artwork available then was a stacked lockup whose wordmark
+ * rendered at roughly 20px inside a sane header. The horizontal lockup removes
+ * that constraint, so the site now shows the real letterforms.
+ *
+ * Aspect ratio is fixed at the trimmed artwork's 1788x407. Declaring both
+ * dimensions keeps the box reserved before the image decodes, which is part of
+ * why CLS stays at zero.
  */
-export function Logo({ className = '' }: { className?: string }) {
+
+type Props = {
+  className?: string
+  /**
+   * 'header' keeps the lockup compact enough for a 64-72px bar. At that size
+   * the "LANDSCAPING | LAWN CARE" line is about 4px tall and reads as texture
+   * rather than words, which is normal for a lockup in a navigation bar.
+   *
+   * 'footer' renders it larger, where there is room, so the tagline is legible
+   * somewhere on the page.
+   */
+  size?: 'header' | 'footer'
+}
+
+/**
+ * Density descriptors are per variant rather than shared. They are relative to
+ * the element's rendered height, so a single srcset written for the 34px header
+ * would hand the 60px footer an image half the resolution it needs on a 2x
+ * display, and the wordmark would go soft exactly where it is largest.
+ */
+const VARIANTS = {
+  header: {
+    height: 'h-[30px] sm:h-[34px]',
+    webp: '/media/logo/lockup-40.webp 1x, /media/logo/lockup-80.webp 2x, /media/logo/lockup-120.webp 3x',
+    png: '/media/logo/lockup-40.png 1x, /media/logo/lockup-80.png 2x, /media/logo/lockup-120.png 3x',
+    fallback: '/media/logo/lockup-40.png',
+  },
+  footer: {
+    height: 'h-[52px] sm:h-[60px]',
+    webp: '/media/logo/lockup-80.webp 1x, /media/logo/lockup-120.webp 2x, /media/logo/lockup-180.webp 3x',
+    png: '/media/logo/lockup-80.png 1x, /media/logo/lockup-120.png 2x, /media/logo/lockup-180.png 3x',
+    fallback: '/media/logo/lockup-80.png',
+  },
+} as const
+
+export function Logo({ className = '', size = 'header' }: Props) {
+  const v = VARIANTS[size]
   return (
-    <span className={`flex items-center gap-2.5 sm:gap-3 ${className}`}>
-      <picture>
-        <source type="image/webp" srcSet="/media/logo/mark-96.webp 2x, /media/logo/mark-48.webp 1x" />
-        <img
-          src="/media/logo/mark-96.png"
-          srcSet="/media/logo/mark-144.png 2x, /media/logo/mark-96.png 1x"
-          alt=""
-          width={826}
-          height={372}
-          className="h-[26px] w-auto sm:h-[30px]"
-          decoding="sync"
-        />
-      </picture>
-      <span className="flex flex-col leading-none">
-        <span
-          className="font-display text-ink"
-          style={{
-            fontVariationSettings: "'wdth' 118, 'wght' 700",
-            fontSize: 'clamp(1rem, 0.9rem + 0.5vw, 1.25rem)',
-            letterSpacing: '-0.015em',
-          }}
-        >
-          Nicolas{' '}
-        </span>
-        {/* Floor of 10px. Below that the tracked-out caps stop being readable,
-            and the audit was measuring this at 8px on phones. */}
-        <span
-          className="text-ink-soft"
-          style={{
-            fontSize: 'clamp(0.625rem, 0.59rem + 0.14vw, 0.6875rem)',
-            letterSpacing: '0.24em',
-            marginTop: '0.24em',
-            fontWeight: 500,
-          }}
-        >
-          LANDSCAPING
-        </span>
-      </span>
-    </span>
+    <picture>
+      <source type="image/webp" srcSet={v.webp} />
+      <img
+        src={v.fallback}
+        srcSet={v.png}
+        alt="Nicolas Landscaping"
+        width={1788}
+        height={407}
+        // The lockup is the accessible name of the link that wraps it, so this
+        // carries real alt text rather than an empty string.
+        className={`${v.height} w-auto ${className}`}
+        decoding="async"
+      />
+    </picture>
   )
 }

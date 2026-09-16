@@ -92,7 +92,8 @@ Originals live outside this repo and are never modified. Copies go in
 media-source/
   photos/    3:4 stills
   video/     source clips
-  logo/      logo-full.png
+  logo/      logo-horizontal.png  (header and footer lockup)
+             logo-full.png        (stacked lockup, used only to cut the square icons)
 ```
 
 Then:
@@ -107,7 +108,8 @@ That writes to `public/media/` and handles:
 - One gentle colour grade across every photo so the set reads as a single shoot
 - **EXIF and GPS stripped from everything** - these are customers' homes
 - Video trimmed, muted, encoded to H.264 MP4, with a graded poster frame
-- The logo mark isolated from the stacked lockup, plus favicons and the OG card
+- The horizontal lockup trimmed to its ink and exported at four heights, plus
+  favicons cut from the mark and the Open Graph card
 
 Trim points per clip are in the `CLIPS` map at the top of
 `scripts/optimize-media.mjs`. To use a different part of a clip, change `start`
@@ -175,6 +177,27 @@ host unchanged.
   scrolling, and Lenis's `anchors.offset` for smooth scrolling. Adding
   `scroll-mt-*` to sections on top of those stacks a third offset and drops the
   target 200px down the page.
+
+## A note on the logo
+
+The header and footer use the client's **horizontal lockup**
+(`media-source/logo/logo-horizontal.png`) as supplied, so the real mark sits
+beside the real letterforms.
+
+It renders at two sizes, and the reason is legibility. The
+"LANDSCAPING | LAWN CARE" line is only about a tenth of the artwork's height, so
+in a 64-72px header it lands around 4px tall and reads as texture rather than
+words. That is ordinary for a lockup in a navigation bar. The footer renders it
+at roughly 60px, where the tagline is genuinely readable, so the full lockup
+resolves properly somewhere on every page.
+
+Density descriptors are written per variant rather than shared. They are
+relative to the element's rendered height, so one srcset tuned for the 34px
+header would hand the 60px footer an image at half the resolution it needs on a
+2x display, and the wordmark would go soft exactly where it is largest.
+
+The stacked lockup is still in `media-source` because the square favicons are cut
+from its mark. Nothing else uses it.
 
 ---
 
