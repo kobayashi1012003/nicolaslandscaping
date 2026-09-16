@@ -20,12 +20,20 @@ const archivo = Archivo({
   axes: ['wdth'],
   variable: '--font-archivo',
   display: 'swap',
+  // next/font preloads by default. These two weigh about 118kb together and were
+  // being fetched at High priority in the same instant as the 93kb hero poster,
+  // splitting the connection three ways and pushing LCP out by ~260ms. The LCP
+  // element is an image, so the image gets the bandwidth. The fonts still load
+  // early off the stylesheet, and swap plus next/font's size-adjusted fallback
+  // metrics mean text is readable throughout and CLS stays at zero.
+  preload: false,
 })
 
 const instrument = Instrument_Sans({
   subsets: ['latin'],
   variable: '--font-instrument',
   display: 'swap',
+  preload: false,
 })
 
 export const metadata: Metadata = {
@@ -90,8 +98,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           as="image"
           href="/media/video/hero-poster-1080.avif"
           type="image/avif"
-          imageSrcSet="/media/video/hero-poster-640.avif 640w, /media/video/hero-poster-1080.avif 1080w"
-          imageSizes="(min-width: 1024px) 44vw, 100vw"
+          imageSrcSet="/media/video/hero-poster-640.avif 640w, /media/video/hero-poster-800.avif 800w, /media/video/hero-poster-1080.avif 1080w"
+          imageSizes="(min-width: 1024px) 44vw, calc(100vw - 40px)"
           fetchPriority="high"
         />
         {/* Scroll reveals are server-rendered at opacity 0 and animated in by

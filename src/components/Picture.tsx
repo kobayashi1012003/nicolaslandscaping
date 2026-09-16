@@ -37,8 +37,11 @@ export function Picture({ name, sizes, className, priority = false, alt }: Props
         height={1440}
         className={className}
         loading={priority ? 'eager' : 'lazy'}
-        // fetchPriority high on the hero pulls it ahead of the video request.
-        fetchPriority={priority ? 'high' : 'auto'}
+        // Below-the-fold media is explicitly deprioritised rather than left on
+        // 'auto'. Chrome's lazy-loading threshold is generous enough that the
+        // gallery images start downloading during the LCP window and share the
+        // connection with it; 'low' makes them yield instead.
+        fetchPriority={priority ? 'high' : 'low'}
         decoding={priority ? 'sync' : 'async'}
       />
     </picture>

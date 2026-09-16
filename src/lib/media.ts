@@ -76,7 +76,7 @@ export function fallbackSrc(name: string) {
 }
 
 export function posterSet(name: string, ext: 'avif' | 'webp' | 'jpg') {
-  return [640, 1080].map((w) => `${VID}/${name}-poster-${w}.${ext} ${w}w`).join(', ')
+  return [640, 800, 1080].map((w) => `${VID}/${name}-poster-${w}.${ext} ${w}w`).join(', ')
 }
 
 export function posterSrc(name: string) {
@@ -85,6 +85,11 @@ export function posterSrc(name: string) {
 
 export function videoSrc(name: string) {
   return `${VID}/${name}.mp4`
+}
+
+/** Half-width encode served to phones, roughly a third of the full file. */
+export function videoSrcSmall(name: string) {
+  return `${VID}/${name}-sm.mp4`
 }
 
 /**

@@ -122,22 +122,35 @@ async function buildVideo(file) {
     mp4,
   ])
 
+  // A second, lighter encode for phones. The full file is around 1.5mb, which
+  // is a lot of someone's cellular data for a decorative loop behind a poster
+  // they can already see. Half width and a looser CRF cuts it by roughly two
+  // thirds and is indistinguishable at phone size.
+  const mp4Sm = path.join(dir, name + '-sm.mp4')
+  await run('ffmpeg', [
+    '-v', 'error', '-y', '-ss', ss, '-t', t, '-i', file,
+    '-an', '-vf', vf + ',scale=480:-2',
+    '-c:v', 'libx264', '-preset', 'slow', '-crf', '32',
+    '-profile:v', 'main', '-movflags', '+faststart', '-pix_fmt', 'yuv420p',
+    mp4Sm,
+  ])
+
   // The poster gets the same grade as the stills so nothing shifts on play.
   const rawPoster = path.join(dir, name + '-poster-raw.png')
   await run('ffmpeg', ['-v', 'error', '-y', '-ss', ss, '-i', file, '-frames:v', '1', rawPoster])
-  for (const w of [640, 1080]) {
+  for (const w of [640, 800, 1080]) {
     const h = Math.round((w * 4) / 3)
     const base = graded(
       sharp(rawPoster).resize(w, h, { fit: 'cover', position: sharp.strategy.attention })
     )
-    await base.clone().avif({ quality: 50, effort: 6 }).toFile(path.join(dir, name + '-poster-' + w + '.avif'))
+    await base.clone().avif({ quality: 42, effort: 7 }).toFile(path.join(dir, name + '-poster-' + w + '.avif'))
     await base.clone().webp({ quality: 72 }).toFile(path.join(dir, name + '-poster-' + w + '.webp'))
     await base.clone().jpeg({ quality: 76, mozjpeg: true }).toFile(path.join(dir, name + '-poster-' + w + '.jpg'))
   }
   await unlink(rawPoster)
 
   console.log(
-    '  ' + name + ': mp4 ' + kb(await sizeOf(mp4)) +
+    '  ' + name + ': mp4 ' + kb(await sizeOf(mp4)) + ' / sm ' + kb(await sizeOf(mp4Sm)) +
     '  (' + cfg.start + 's +' + cfg.dur + 's' + (cfg.pingPong ? ', ping-pong' : '') + ')'
   )
   return name
