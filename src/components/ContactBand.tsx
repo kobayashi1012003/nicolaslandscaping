@@ -1,4 +1,4 @@
-import { ChatCircleTextIcon, InstagramLogoIcon, PhoneIcon } from '@phosphor-icons/react/dist/ssr'
+import { ChatCircleTextIcon, InstagramLogoIcon } from '@phosphor-icons/react/dist/ssr'
 import { business } from '@/lib/business'
 import { Reveal } from '@/components/Reveal'
 
@@ -20,7 +20,7 @@ export function ContactBand() {
         <Reveal index={1}>
           <a
             href={`tel:${business.phone.tel}`}
-            className="mt-8 block w-fit font-display text-paper transition-opacity hover:opacity-80"
+            className="mt-8 block w-fit py-1.5 font-display text-paper transition-opacity hover:opacity-80"
             style={{
               fontVariationSettings: "'wdth' 112, 'wght' 700",
               fontSize: 'clamp(2.25rem, 1.2rem + 4.6vw, 4.75rem)',
@@ -33,14 +33,15 @@ export function ContactBand() {
         </Reveal>
 
         <Reveal index={2}>
+          {/* No call button here on purpose. The number above is itself the
+              tel: link, set at display size, and adding a button beside it gave
+              the page a third different label for one action ("Call now" next to
+              the hero's "Call (619) 622-1735" next to the bar's "Call"). One
+              label per intent: the number is the call, "Text us" is the text. */}
           <div className="mt-10 flex flex-wrap items-center gap-3">
-            <a href={`tel:${business.phone.tel}`} className="u-btn u-btn--onGreen">
-              <PhoneIcon size={18} weight="fill" aria-hidden />
-              Call now
-            </a>
-            <a href={`sms:${business.phone.sms}`} className="u-btn u-btn--onGreenOutline">
+            <a href={`sms:${business.phone.sms}`} className="u-btn u-btn--onGreen">
               <ChatCircleTextIcon size={18} weight="fill" aria-hidden />
-              Send a text
+              Text us
             </a>
             <a
               href={business.instagram.url}

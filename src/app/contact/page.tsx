@@ -1,5 +1,5 @@
 import type { Metadata } from 'next'
-import { ChatCircleTextIcon, InstagramLogoIcon, PhoneIcon } from '@phosphor-icons/react/dist/ssr'
+import { ChatCircleTextIcon, InstagramLogoIcon } from '@phosphor-icons/react/dist/ssr'
 import { business, services } from '@/lib/business'
 import { Picture } from '@/components/Picture'
 import { Reveal } from '@/components/Reveal'
@@ -28,7 +28,7 @@ export default function ContactPage() {
           <Reveal index={1}>
             <a
               href={`tel:${business.phone.tel}`}
-              className="mt-10 block w-fit font-display text-ink transition-colors hover:text-green"
+              className="mt-10 block w-fit py-1.5 font-display text-ink transition-colors hover:text-green"
               style={{
                 fontVariationSettings: "'wdth' 112, 'wght' 700",
                 fontSize: 'clamp(2.25rem, 1.1rem + 5vw, 4.5rem)',
@@ -40,15 +40,14 @@ export default function ContactPage() {
             </a>
           </Reveal>
 
+          {/* The number above is the call CTA. A button repeating it would be a
+              second label for the same action, so this row carries the text
+              option only. */}
           <Reveal index={2}>
             <div className="mt-8 flex flex-wrap gap-3">
-              <a href={`tel:${business.phone.tel}`} className="u-btn u-btn--solid">
-                <PhoneIcon size={18} weight="fill" aria-hidden />
-                Call now
-              </a>
-              <a href={`sms:${business.phone.sms}`} className="u-btn u-btn--outline">
+              <a href={`sms:${business.phone.sms}`} className="u-btn u-btn--solid">
                 <ChatCircleTextIcon size={18} weight="fill" aria-hidden />
-                Send a text
+                Text us
               </a>
             </div>
           </Reveal>
