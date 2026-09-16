@@ -86,17 +86,26 @@ export default function ServicesPage() {
           >
             <div className="grid grid-cols-1 items-center gap-8 md:grid-cols-12 md:gap-12">
               <Reveal
+                disabled={mediaIndex === 0}
                 className={`md:col-span-5 ${mediaOnRight ? 'md:order-2 md:col-start-8' : 'md:col-start-1'}`}
               >
+                {/* The first block is this page's LCP element, so it loads
+                    eagerly at high priority. The rest stay lazy and low. */}
                 {VIDEO_KEYS.has(key) ? (
                   <VideoLoop
                     name={key as VideoKey}
+                    eager={mediaIndex === 0}
+                    posterOnlyOnMobile={mediaIndex === 0}
                     sizes="(min-width: 768px) 40vw, 100vw"
                     className="aspect-3/4"
                   />
                 ) : (
                   <figure className="u-media u-hover-zoom m-0 aspect-3/4">
-                    <Picture name={IMAGE_FOR[key]} sizes="(min-width: 768px) 40vw, 100vw" />
+                    <Picture
+                      name={IMAGE_FOR[key]}
+                      priority={mediaIndex === 0}
+                      sizes="(min-width: 768px) 40vw, 100vw"
+                    />
                   </figure>
                 )}
               </Reveal>

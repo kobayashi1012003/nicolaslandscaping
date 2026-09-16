@@ -25,7 +25,7 @@ export default function ContactPage() {
         <div className="lg:col-span-7">
           <h1 className="u-display max-w-[10ch]">Get in touch.</h1>
 
-          <Reveal index={1}>
+          <Reveal index={1} disabled>
             <a
               href={`tel:${business.phone.tel}`}
               className="mt-10 block w-fit py-1.5 font-display text-ink transition-colors hover:text-green"
@@ -43,7 +43,7 @@ export default function ContactPage() {
           {/* The number above is the call CTA. A button repeating it would be a
               second label for the same action, so this row carries the text
               option only. */}
-          <Reveal index={2}>
+          <Reveal index={2} disabled>
             <div className="mt-8 flex flex-wrap gap-3">
               <a href={`sms:${business.phone.sms}`} className="u-btn u-btn--solid">
                 <ChatCircleTextIcon size={18} weight="fill" aria-hidden />
@@ -52,7 +52,7 @@ export default function ContactPage() {
             </div>
           </Reveal>
 
-          <Reveal index={3}>
+          <Reveal index={3} disabled>
             <dl className="mt-14 grid gap-8 border-t border-rule pt-10 sm:grid-cols-2">
               <div>
                 <dt className="text-[0.8125rem] font-medium tracking-[0.14em] text-ink-soft">
@@ -100,9 +100,9 @@ export default function ContactPage() {
         </div>
 
         <div className="lg:col-span-5">
-          <Reveal>
+          <Reveal disabled>
             <figure className="u-media aspect-3/4">
-              <Picture name="borderFinished" sizes="(min-width: 1024px) 38vw, 100vw" />
+              <Picture name="borderFinished" priority sizes="(min-width: 1024px) 38vw, 100vw" />
             </figure>
           </Reveal>
         </div>

@@ -160,7 +160,10 @@ export function VideoLoop({
           height={1440}
           loading={eager ? 'eager' : 'lazy'}
           fetchPriority={eager ? 'high' : 'low'}
-          decoding={eager ? 'sync' : 'async'}
+          // async, not sync. A synchronous decode of an 800x1067 AVIF runs on the
+        // main thread, and under Lighthouse mobile throttling that is measurable
+        // render delay on the one image that must paint first.
+        decoding="async"
           className="absolute inset-0 h-full w-full object-cover"
         />
       </picture>

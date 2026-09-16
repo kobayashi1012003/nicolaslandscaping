@@ -18,6 +18,21 @@ export const metadata: Metadata = {
 export default function HomePage() {
   return (
     <>
+      {/* React 19 hoists this into <head>. It belongs on this page rather than
+          the root layout: the hero poster is the LCP element here and nowhere
+          else, and preloading it globally cost every other route a wasted 68kb.
+          The srcset and sizes must match the <img> exactly or the browser
+          treats it as a separate resource and downloads the image twice. */}
+      <link
+        rel="preload"
+        as="image"
+        href="/media/video/hero-poster-1080.avif"
+        type="image/avif"
+        imageSrcSet="/media/video/hero-poster-640.avif 640w, /media/video/hero-poster-800.avif 800w, /media/video/hero-poster-1080.avif 1080w"
+        imageSizes="(min-width: 1024px) 44vw, calc(100vw - 40px)"
+        fetchPriority="high"
+      />
+
       {/* 01 Hero. Asymmetric split: the type holds the left, the portrait clip
           runs full height on the right and bleeds off the edge. */}
       <section className="u-shell grid min-h-[100svh] grid-cols-1 items-center gap-10 pb-16 pt-[calc(var(--header-h)+40px)] lg:grid-cols-[minmax(0,1fr)_minmax(0,0.82fr)] lg:gap-16 lg:pb-24 lg:pt-[calc(var(--header-h)+24px)]">

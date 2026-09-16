@@ -9,6 +9,15 @@ type Props = {
   index?: number
   className?: string
   as?: 'div' | 'li' | 'section' | 'figure'
+  /**
+   * Render the children plainly, with no enter animation.
+   *
+   * Use this for anything above the fold. A reveal starts at opacity 0, and an
+   * invisible element is not a Largest Contentful Paint candidate, so wrapping
+   * the first image on a page in one delays its LCP until the animation runs.
+   * There is also nothing to reveal: it is already in view when the page loads.
+   */
+  disabled?: boolean
 }
 
 /**
@@ -21,9 +30,20 @@ type Props = {
  * Transform and opacity only, so it stays on the compositor. `once` means it
  * never replays and never costs anything on the way back up.
  */
-export function Reveal({ children, index = 0, className, as = 'div' }: Props) {
+export function Reveal({
+  children,
+  index = 0,
+  className,
+  as = 'div',
+  disabled = false,
+}: Props) {
   const reduce = useReducedMotion()
   const MotionTag = motion[as]
+
+  if (disabled) {
+    const Tag = as
+    return <Tag className={className}>{children}</Tag>
+  }
 
   return (
     <MotionTag

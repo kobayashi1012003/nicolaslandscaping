@@ -91,17 +91,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en" className={`${archivo.variable} ${instrument.variable}`}>
       <head>
-        {/* The hero poster is the LCP candidate, so it is preloaded at the two
-            widths the hero actually renders at. */}
-        <link
-          rel="preload"
-          as="image"
-          href="/media/video/hero-poster-1080.avif"
-          type="image/avif"
-          imageSrcSet="/media/video/hero-poster-640.avif 640w, /media/video/hero-poster-800.avif 800w, /media/video/hero-poster-1080.avif 1080w"
-          imageSizes="(min-width: 1024px) 44vw, calc(100vw - 40px)"
-          fetchPriority="high"
-        />
+        {/* The LCP preload lives on the home page, not here. Sitting in the root
+            layout it fired on every route, downloading 68kb of hero poster on
+            /services/ and /contact/ where that image never appears. */}
         {/* Scroll reveals are server-rendered at opacity 0 and animated in by
             Motion. If JS never runs, that would hide everything below the fold,
             so force them visible when scripting is unavailable. */}

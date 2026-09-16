@@ -42,7 +42,10 @@ export function Picture({ name, sizes, className, priority = false, alt }: Props
         // gallery images start downloading during the LCP window and share the
         // connection with it; 'low' makes them yield instead.
         fetchPriority={priority ? 'high' : 'low'}
-        decoding={priority ? 'sync' : 'async'}
+        // async, not sync. A synchronous decode of an 800x1067 AVIF runs on the
+        // main thread, and under Lighthouse mobile throttling that is measurable
+        // render delay on the one image that must paint first.
+        decoding="async"
       />
     </picture>
   )
