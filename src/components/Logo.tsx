@@ -31,7 +31,7 @@ export function Logo({ className = '' }: { className?: string }) {
             letterSpacing: '-0.015em',
           }}
         >
-          Nicolas
+          Nicolas{' '}
         </span>
         {/* Floor of 10px. Below that the tracked-out caps stop being readable,
             and the audit was measuring this at 8px on phones. */}

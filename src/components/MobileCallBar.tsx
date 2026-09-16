@@ -48,10 +48,16 @@ export function MobileCallBar() {
       initial={false}
       animate={{ y: shown ? '0%' : '110%' }}
       transition={reduce ? { duration: 0 } : { duration: 0.34, ease: [0.16, 1, 0.3, 1] }}
+      data-callbar=""
       className="fixed inset-x-0 bottom-0 z-30 border-t border-rule bg-paper/95 backdrop-blur-md md:hidden"
       style={{ paddingBottom: 'env(safe-area-inset-bottom, 0px)' }}
       aria-hidden={!shown}
     >
+      {/* "Call" and "Text" rather than the full labels used elsewhere. This is
+          the one place the shorter wording is justified: two buttons side by
+          side at 360px cannot fit "Call (619) 622-1735" without wrapping, and a
+          wrapped CTA is worse than a short one. Everywhere with room uses the
+          full label. */}
       <div className="flex items-center gap-2 px-4 py-3">
         <a
           href={`tel:${business.phone.tel}`}

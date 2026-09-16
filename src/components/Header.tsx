@@ -119,13 +119,18 @@ export function Header() {
           }`}
         >
           <div className="u-shell flex h-(--header-h) items-center justify-between gap-4">
+            {/* No aria-label here. Replacing the accessible name with one that
+                does not contain the visible text breaks WCAG 2.5.3 Label in
+                Name, so a voice-control user saying "Nicolas Landscaping" would
+                not match this link. The visible wordmark is the name; the extra
+                context is appended for screen readers only. */}
             <Link
               href="/"
               onClick={onLogoClick}
-              aria-label={`${business.name}, back to the top of the home page`}
               className="-mx-1 flex min-h-11 shrink-0 items-center rounded-sm px-1"
             >
               <Logo />
+              <span className="sr-only">, back to the top of the home page</span>
             </Link>
 
             <nav aria-label="Primary" className="hidden items-center gap-8 md:flex">
