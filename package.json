@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
+    "build": "next build && node scripts/fix-export-prefetch.mjs",
     "start": "npx serve@latest out",
     "lint": "next lint",
     "media": "node scripts/optimize-media.mjs"
