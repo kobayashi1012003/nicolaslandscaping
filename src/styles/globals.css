@@ -1,0 +1,277 @@
+@import 'tailwindcss';
+
+/*
+  Design tokens.
+
+  Palette note: the two greens are sampled directly out of the client's logo
+  file, not picked by eye. #2C6930 clears 6.62:1 on the paper background and is
+  the only green allowed to carry text. #45954A measures 3.72:1, which passes
+  for large text and UI graphics but NOT for body copy, so it is restricted to
+  fills, rules and oversized display type.
+
+  Shape rule, applied everywhere: interactive controls get --radius-control,
+  media and section edges stay square. No mixed radii beyond that.
+*/
+@theme {
+  --color-paper: #fcfcfb;
+  --color-paper-alt: #f1f1ee;
+  --color-ink: #131513;
+  --color-ink-soft: #5a5f5a;
+  --color-rule: #dededa;
+  --color-green: #2c6930;
+  --color-green-deep: #1c4420;
+  --color-green-bright: #45954a;
+  --color-water: #2f6280;
+
+  --font-display: var(--font-archivo), ui-sans-serif, system-ui, sans-serif;
+  --font-body: var(--font-instrument), ui-sans-serif, system-ui, sans-serif;
+
+  --radius-control: 6px;
+
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@layer base {
+  :root {
+    --header-h: 64px;
+    --callbar-h: 0px;
+    color-scheme: light;
+  }
+
+  @media (min-width: 768px) {
+    :root {
+      --header-h: 72px;
+    }
+  }
+
+  html {
+    /* Must stay auto. Native smooth scrolling and Lenis fight each other and
+       the page stutters. Lenis owns the easing. */
+    scroll-behavior: auto;
+    /* Anchor targets and keyboard focus must clear the sticky header and the
+       mobile call bar. WCAG 2.2 Focus Not Obscured (2.4.11). */
+    scroll-padding-top: calc(var(--header-h) + 24px);
+    scroll-padding-bottom: calc(var(--callbar-h) + 24px);
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    background-color: var(--color-paper);
+    color: var(--color-ink);
+    font-family: var(--font-body);
+    font-size: clamp(1rem, 0.96rem + 0.2vw, 1.125rem);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+    overflow-x: hidden;
+  }
+
+  h1,
+  h2,
+  h3 {
+    font-family: var(--font-display);
+    text-wrap: balance;
+  }
+
+  /* Visible, high-contrast focus on every interactive element. Never removed. */
+  :focus-visible {
+    outline: 2px solid var(--color-ink);
+    outline-offset: 3px;
+    border-radius: 2px;
+  }
+
+  ::selection {
+    background: var(--color-green);
+    color: #fff;
+  }
+}
+
+@layer components {
+  .u-shell {
+    width: 100%;
+    max-width: 1440px;
+    margin-inline: auto;
+    padding-inline: 20px;
+  }
+
+  @media (min-width: 768px) {
+    .u-shell {
+      padding-inline: 40px;
+    }
+  }
+
+  @media (min-width: 1280px) {
+    .u-shell {
+      padding-inline: 64px;
+    }
+  }
+
+  .u-display {
+    font-family: var(--font-display);
+    font-variation-settings: 'wdth' 115, 'wght' 700;
+    font-size: clamp(2.75rem, 1.6rem + 5.4vw, 6.5rem);
+    line-height: 0.95;
+    letter-spacing: -0.03em;
+  }
+
+  .u-h2 {
+    font-family: var(--font-display);
+    font-variation-settings: 'wdth' 108, 'wght' 650;
+    font-size: clamp(1.875rem, 1.1rem + 3.2vw, 3.5rem);
+    line-height: 1.02;
+    letter-spacing: -0.025em;
+  }
+
+  .u-h3 {
+    font-family: var(--font-display);
+    font-variation-settings: 'wdth' 104, 'wght' 600;
+    font-size: clamp(1.25rem, 1.05rem + 0.9vw, 1.75rem);
+    line-height: 1.15;
+    letter-spacing: -0.015em;
+  }
+
+  /* The service name in the index rows, sized to carry a section on its own. */
+  .u-row-title {
+    font-family: var(--font-display);
+    font-variation-settings: 'wdth' 110, 'wght' 620;
+    font-size: clamp(1.75rem, 1rem + 3.1vw, 3.25rem);
+    line-height: 1;
+    letter-spacing: -0.025em;
+  }
+
+  .u-lede {
+    font-size: clamp(1.0625rem, 1rem + 0.35vw, 1.3125rem);
+    line-height: 1.5;
+    max-width: 34ch;
+    color: var(--color-ink-soft);
+  }
+
+  .u-prose {
+    max-width: 62ch;
+  }
+
+  /* Tap targets are 48px tall everywhere. iOS wants 44pt, Android 48dp, so 48
+     satisfies both and leaves room for the 8px minimum gap between them. */
+  .u-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    min-height: 48px;
+    padding-inline: 1.25rem;
+    border-radius: var(--radius-control);
+    font-weight: 600;
+    font-size: 0.9375rem;
+    letter-spacing: -0.005em;
+    white-space: nowrap;
+    transition:
+      background-color 0.25s var(--ease-out-expo),
+      color 0.25s var(--ease-out-expo),
+      border-color 0.25s var(--ease-out-expo),
+      transform 0.12s ease-out;
+  }
+
+  .u-btn:active {
+    transform: translateY(1px);
+  }
+
+  .u-btn--solid {
+    background: var(--color-green);
+    color: #fff;
+  }
+
+  .u-btn--solid:hover {
+    background: var(--color-green-deep);
+  }
+
+  .u-btn--outline {
+    border: 1.5px solid var(--color-ink);
+    color: var(--color-ink);
+    background: transparent;
+  }
+
+  .u-btn--outline:hover {
+    background: var(--color-ink);
+    color: var(--color-paper);
+  }
+
+  /* On the deep green contact band the solid button inverts so it stays legible. */
+  .u-btn--onGreen {
+    background: var(--color-paper);
+    color: var(--color-green-deep);
+  }
+
+  .u-btn--onGreen:hover {
+    background: #fff;
+  }
+
+  .u-btn--onGreenOutline {
+    border: 1.5px solid rgb(255 255 255 / 0.55);
+    color: #fff;
+  }
+
+  .u-btn--onGreenOutline:hover {
+    border-color: #fff;
+    background: rgb(255 255 255 / 0.1);
+  }
+
+  .u-link {
+    color: var(--color-water);
+    text-decoration: underline;
+    text-underline-offset: 0.2em;
+    text-decoration-thickness: 1px;
+    transition: text-decoration-thickness 0.2s var(--ease-out-expo);
+  }
+
+  .u-link:hover {
+    text-decoration-thickness: 2px;
+  }
+}
+
+@layer utilities {
+  /* Media frames. Square corners by the shape rule. */
+  .u-media {
+    position: relative;
+    overflow: hidden;
+    background: var(--color-paper-alt);
+  }
+
+  .u-media img,
+  .u-media video {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .u-hover-zoom img {
+    transition: transform 0.7s var(--ease-out-expo);
+  }
+
+  /* Hover zoom is a pointer affordance. Touch devices get nothing, which keeps
+     the transform off the compositor on the devices least able to afford it. */
+  @media (hover: hover) and (pointer: fine) {
+    .u-hover-zoom:hover img {
+      transform: scale(1.04);
+    }
+  }
+}
+
+/*
+  Reduced motion. Everything collapses to instant. The Lenis instance is torn
+  down separately in JS so native scrolling takes over completely.
+*/
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  .u-hover-zoom:hover img {
+    transform: none;
+  }
+}
