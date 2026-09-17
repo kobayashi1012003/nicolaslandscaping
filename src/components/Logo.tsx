@@ -18,7 +18,7 @@ type Props = {
    * 'header' is the horizontal lockup, sized to fill most of the 64-72px bar.
    *
    * 'footer' is the stacked lockup — mark above wordmark — at a size where the
-   * "LANDSCAPING | LAWN CARE" line is legible rather than texture.
+   * "LANDSCAPING | CONSTRUCTION" line is legible rather than texture.
    */
   size?: 'header' | 'footer'
 }
@@ -33,16 +33,16 @@ type Props = {
 const VARIANTS = {
   header: {
     height: 'h-[46px] sm:h-[54px]',
-    width: 1873,
-    intrinsicHeight: 407,
+    width: 2128,
+    intrinsicHeight: 435,
     webp: '/media/logo/lockup-80.webp 1x, /media/logo/lockup-120.webp 2x, /media/logo/lockup-180.webp 3x',
     png: '/media/logo/lockup-80.png 1x, /media/logo/lockup-120.png 2x, /media/logo/lockup-180.png 3x',
     fallback: '/media/logo/lockup-80.png',
   },
   footer: {
     height: 'h-[104px] sm:h-[120px]',
-    width: 1624,
-    intrinsicHeight: 776,
+    width: 1423,
+    intrinsicHeight: 758,
     webp: '/media/logo/stacked-120.webp 1x, /media/logo/stacked-240.webp 2x, /media/logo/stacked-360.webp 3x',
     png: '/media/logo/stacked-120.png 1x, /media/logo/stacked-240.png 2x, /media/logo/stacked-360.png 3x',
     fallback: '/media/logo/stacked-120.png',

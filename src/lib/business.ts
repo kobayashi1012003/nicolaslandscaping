@@ -124,11 +124,13 @@ export const services: Service[] = [
     media: null,
   },
   {
-    slug: 'lawn-care',
-    name: 'Lawn Care',
-    // On the logo lockup alongside Landscaping, and confirmed in scope by the
-    // client contact. Wording is standard for the trade; confirm with Nicolas.
-    description: 'Mowing, edging and regular upkeep.',
+    slug: 'construction',
+    name: 'Construction',
+    // On the logo lockup alongside Landscaping, which is the whole basis for it
+    // being here. NEEDS NICOLAS TO CONFIRM: the line below is deliberately broad
+    // because no specific build work is evidenced in the footage. Replace it
+    // with his own words, or narrow it to what he actually takes on.
+    description: 'Hardscaping and structures built on site.',
     media: null,
   },
   {

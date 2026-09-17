@@ -9,7 +9,7 @@ import type { ImageKey, VideoKey } from '@/lib/media'
 export const metadata: Metadata = {
   title: 'Services',
   description:
-    'Tree trimming, palm trees, clean-up and removal, stump grinding, planting, irrigation, lawn care and fencing in San Diego. Call or text (619) 622-1735.',
+    'Tree trimming, palm trees, clean-up and removal, stump grinding, planting, irrigation, construction and fencing in San Diego. Call or text (619) 622-1735.',
   alternates: { canonical: '/services/' },
 }
 

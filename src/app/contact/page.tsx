@@ -7,7 +7,7 @@ import { Reveal } from '@/components/Reveal'
 export const metadata: Metadata = {
   title: 'Contact',
   description:
-    'Call or text Nicolas Landscaping on (619) 622-1735 for tree trimming, clean-ups, planting, irrigation, lawn care and fencing in San Diego.',
+    'Call or text Nicolas Landscaping on (619) 622-1735 for tree trimming, clean-ups, planting, irrigation, construction and fencing in San Diego.',
   alternates: { canonical: '/contact/' },
 }
 

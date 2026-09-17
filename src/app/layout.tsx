@@ -43,7 +43,7 @@ export const metadata: Metadata = {
     template: '%s | Nicolas Landscaping',
   },
   description:
-    'Tree trimming, palm trees, stump grinding, clean-ups, planting, irrigation, lawn care and fencing across San Diego. Call or text for a quote.',
+    'Tree trimming, palm trees, stump grinding, clean-ups, planting, irrigation, construction and fencing across San Diego. Call or text for a quote.',
   applicationName: business.name,
   alternates: { canonical: '/' },
   openGraph: {
@@ -53,7 +53,7 @@ export const metadata: Metadata = {
     siteName: business.name,
     title: 'Nicolas Landscaping | Tree Trimming and Yard Work in San Diego',
     description:
-      'Tree trimming, palm trees, stump grinding, clean-ups, planting, irrigation, lawn care and fencing across San Diego.',
+      'Tree trimming, palm trees, stump grinding, clean-ups, planting, irrigation, construction and fencing across San Diego.',
     images: [
       {
         url: '/og.jpg',

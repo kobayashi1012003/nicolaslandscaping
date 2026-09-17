@@ -11,7 +11,7 @@ import { VideoLoop } from '@/components/VideoLoop'
 export const metadata: Metadata = {
   title: 'Nicolas Landscaping | Tree Trimming and Yard Work in San Diego',
   description:
-    'Tree trimming, palm trees, stump grinding, clean-ups, planting, irrigation, lawn care and fencing across San Diego. Call or text (619) 622-1735.',
+    'Tree trimming, palm trees, stump grinding, clean-ups, planting, irrigation, construction and fencing across San Diego. Call or text (619) 622-1735.',
   alternates: { canonical: '/' },
 }
 

@@ -184,7 +184,7 @@ async function buildLogo() {
 
   // Stacked lockup, also supplied by the client. The footer has vertical room
   // the header does not, so it shows the mark sitting above the wordmark at a
-  // size where the "LANDSCAPING | LAWN CARE" line is actually readable.
+  // size where the "LANDSCAPING | CONSTRUCTION" line is actually readable.
   const stackBuf = await sharp(src).trim().png().toBuffer()
   const sm = await sharp(stackBuf).metadata()
   console.log(

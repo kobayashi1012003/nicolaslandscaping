@@ -77,8 +77,10 @@ Search `src/lib/business.ts` for these. They are marked in comments.
 
 - **Service with Trailer** - the current line reflects a best guess, not
   Nicolas's own words.
-- **Lawn Care** and the other service descriptions - standard wording for the
-  trade, not quoted from him.
+- **Construction** - on the logo lockup, but no build work is evidenced in the
+  footage, so the line is deliberately broad.
+- The other service descriptions - standard wording for the trade, not quoted
+  from him.
 
 Anything genuinely unknown is `null`, and the UI omits that element rather than
 inventing something. Keep it that way.
@@ -180,24 +182,27 @@ host unchanged.
 
 ## A note on the logo
 
-The header and footer use the client's **horizontal lockup**
-(`media-source/logo/logo-horizontal.png`) as supplied, so the real mark sits
-beside the real letterforms.
+The header uses the client's **horizontal lockup**
+(`media-source/logo/logo-horizontal.png`) and the footer uses the **stacked
+lockup** (`logo-full.png`), both as supplied, so the real mark sits with the
+real letterforms in both places.
 
-It renders at two sizes, and the reason is legibility. The
-"LANDSCAPING | LAWN CARE" line is only about a tenth of the artwork's height, so
-in a 64-72px header it lands around 4px tall and reads as texture rather than
-words. That is ordinary for a lockup in a navigation bar. The footer renders it
-at roughly 60px, where the tagline is genuinely readable, so the full lockup
-resolves properly somewhere on every page.
+Which lockup goes where is a question of the space available. The header is a
+64-72px bar, so the wide artwork fits and renders at 46/54px. The footer has
+vertical room, so the stacked lockup runs at 104/120px, where the
+"LANDSCAPING | CONSTRUCTION" line is genuinely readable rather than texture.
 
-Density descriptors are written per variant rather than shared. They are
-relative to the element's rendered height, so one srcset tuned for the 34px
-header would hand the 60px footer an image at half the resolution it needs on a
-2x display, and the wordmark would go soft exactly where it is largest.
+Each variant declares its own intrinsic `width`/`height`, because the two
+lockups are 4.89:1 and 1.88:1. Sharing one pair would reserve the wrong shape
+before the image decodes, and cost the zero CLS.
 
-The stacked lockup is still in `media-source` because the square favicons are cut
-from its mark. Nothing else uses it.
+Density descriptors are written per variant for the same reason. They are
+relative to the element's rendered height, so one srcset tuned for the header
+would hand the much larger footer an image at a fraction of the resolution it
+needs on a 2x display, and the wordmark would go soft exactly where it is
+largest.
+
+The square favicons are cut from the mark at the top of the stacked lockup.
 
 ---
 
