@@ -43,10 +43,10 @@ export const business = {
    * It was false for as long as the site answered only on a throwaway host,
    * because indexed pages on such a host do not disappear when the real domain
    * goes live. They linger in results, compete for the same local searches and
-   * split the ranking signal. The same reasoning still applies to the
-   * workers.dev address the Cloudflare deploy comes with: canonical tags point
-   * here, but disabling that route in the Worker's settings is what actually
-   * stops it being crawled.
+   * split the ranking signal. The workers.dev address the deploy came with was
+   * the same hazard: canonical tags point here, but only disabling the route
+   * stops a crawler fetching it. Both of those routes, production and preview,
+   * are off in the Worker's settings.
    */
   indexable: true,
 

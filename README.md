@@ -71,10 +71,11 @@ arrives; they linger in results and compete with the real site for the same loca
 searches. If the site is ever moved to a staging host again, set it back to false
 and the three of those revert together.
 
-**Still outstanding:** the Cloudflare deploy also answers on a `workers.dev`
-address, and that is exactly the kind of host the flag existed to protect
-against. Canonical tags point at the real domain, but disabling the workers.dev
-route in the Worker's settings is what actually keeps it out of the index.
+The `workers.dev` address the deploy comes with was the same hazard in another
+shape. A canonical tag asks a crawler not to index a page; it does not stop the
+page being fetched. Both of those routes, production and preview, are now
+disabled in the Worker's settings, so the site answers only on the custom domain.
+Re-enabling either one puts the hazard back.
 
 ### Copy still needing the owner's confirmation
 
