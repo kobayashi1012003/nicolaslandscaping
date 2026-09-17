@@ -126,11 +126,38 @@ export const services: Service[] = [
   {
     slug: 'construction',
     name: 'Construction',
-    // On the logo lockup alongside Landscaping, which is the whole basis for it
-    // being here. NEEDS NICOLAS TO CONFIRM: the line below is deliberately broad
-    // because no specific build work is evidenced in the footage. Replace it
-    // with his own words, or narrow it to what he actually takes on.
+    // On the logo lockup alongside Landscaping, and the umbrella over the four
+    // hardscape services below, which the client contact has since confirmed in
+    // scope. The line stays broad on purpose: it is the category, and the
+    // specifics are each listed in their own right.
     description: 'Hardscaping and structures built on site.',
+    media: null,
+  },
+  // Confirmed in scope by the client contact. No footage evidences any of them,
+  // so each description is standard wording for the trade rather than Nicolas's
+  // own; confirm with him before launch.
+  {
+    slug: 'artificial-grass',
+    name: 'Artificial Grass',
+    description: 'Synthetic turf laid over a prepared and levelled base.',
+    media: null,
+  },
+  {
+    slug: 'pavers',
+    name: 'Pavers',
+    description: 'Patios, walkways and driveways laid in paving stone.',
+    media: null,
+  },
+  {
+    slug: 'concrete',
+    name: 'Concrete',
+    description: 'Slabs, walkways and flatwork poured and finished.',
+    media: null,
+  },
+  {
+    slug: 'retaining-wall',
+    name: 'Retaining Wall',
+    description: 'Walls built to hold back a slope and level the ground.',
     media: null,
   },
   {
