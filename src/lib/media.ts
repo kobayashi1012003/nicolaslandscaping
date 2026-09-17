@@ -92,29 +92,7 @@ export function videoSrcSmall(name: string) {
   return `${VID}/${name}-sm.mp4`
 }
 
-/**
- * Small preview stills used by the services index. One width only (640), since
- * these never render larger than about 340px CSS.
- *
- * A service with no honest photograph maps to nothing here and the UI omits the
- * preview rather than borrowing an unrelated frame.
- */
-export const previews: Record<string, { base: string; alt: string }> = {
-  tree: { base: `${VID}/tree-poster`, alt: videos.tree.alt },
-  cleanup: { base: `${VID}/cleanup-poster`, alt: videos.cleanup.alt },
-  trailer: { base: `${VID}/trailer-poster`, alt: videos.trailer.alt },
-  fencing: { base: `${VID}/fencing-poster`, alt: videos.fencing.alt },
-  planting: { base: `${IMG}/work-border-finished-640`, alt: images.borderFinished.alt },
-}
-
-export function previewSources(key: string) {
-  const p = previews[key]
-  if (!p) return null
-  const suffix = p.base.includes('-poster') ? '-640' : ''
-  return {
-    avif: `${p.base}${suffix}.avif`,
-    webp: `${p.base}${suffix}.webp`,
-    jpg: `${p.base}${suffix}.jpg`,
-    alt: p.alt,
-  }
-}
+// The services index used to raise a preview still on hover, and this is where
+// the map from a service to its 640-wide frame lived. The feature is gone at the
+// client's request, so the map went with it. The frames themselves are still
+// shipped and still used, as video posters and as images on /services.
