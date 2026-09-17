@@ -1,0 +1,18 @@
+{
+  // Static assets only. There is no "main", and that absence is load-bearing:
+  // with no wrangler config at all, Wrangler detects Next.js and routes the
+  // deploy through the OpenNext migration, which looks for a server build this
+  // site never produces (.next/standalone) and dies on a missing
+  // pages-manifest.json. Declaring the assets directory here is what tells it
+  // the build is already just files.
+  //
+  // next.config.ts sets output: 'export', so `npm run build` writes ./out.
+  // trailingSlash is on there too, so routes land as contact/index.html and
+  // not_found_handling serves the exported 404.html.
+  "name": "nicolaslandscaping",
+  "compatibility_date": "2026-09-16",
+  "assets": {
+    "directory": "./out",
+    "not_found_handling": "404-page"
+  }
+}
