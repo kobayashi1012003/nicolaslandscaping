@@ -53,23 +53,28 @@ npm start
 service area, the service list and their one-line descriptions. Nothing else
 needs touching.
 
-### Before launch
+### Launch flags
 
 Two flags in that file matter:
 
 ```ts
-siteUrl: 'https://nicolaslandscaping.netlify.app',
-indexable: false,
+siteUrl: 'https://nicolaslandscapingsd.com',
+indexable: true,
 ```
 
-`indexable` is **deliberately false** while the site sits on the temporary
-Netlify address. If Google indexes those URLs they do not vanish when the real
-domain arrives; they linger in results and compete with the real site for the
-same local searches. While it is false, `robots.txt` disallows everything, the
-sitemap is empty and every page carries `noindex`.
+Both are now set for the live domain. `robots.txt` allows, the sitemap is
+published and no page carries `noindex`.
 
-When the real domain is ready, change both in the same commit: set the real
-`siteUrl` and flip `indexable` to `true`.
+`indexable` was deliberately false for as long as the site answered only on a
+throwaway host, because pages indexed there do not vanish when the real domain
+arrives; they linger in results and compete with the real site for the same local
+searches. If the site is ever moved to a staging host again, set it back to false
+and the three of those revert together.
+
+**Still outstanding:** the Cloudflare deploy also answers on a `workers.dev`
+address, and that is exactly the kind of host the flag existed to protect
+against. Canonical tags point at the real domain, but disabling the workers.dev
+route in the Worker's settings is what actually keeps it out of the index.
 
 ### Copy still needing the owner's confirmation
 

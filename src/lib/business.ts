@@ -31,26 +31,24 @@ export const business = {
   },
 
   /**
-   * TODO(owner): replace with the real production domain once it exists.
-   * Currently the temporary Netlify deploy. Drives canonical URLs, sitemap.xml,
-   * robots.txt, Open Graph and JSON-LD.
+   * The production domain. Drives canonical URLs, sitemap.xml, robots.txt,
+   * Open Graph and JSON-LD.
    */
-  siteUrl: 'https://nicolaslandscaping.netlify.app',
+  siteUrl: 'https://nicolaslandscapingsd.com',
 
   /**
-   * Search indexing. FALSE while the site lives on the temporary Netlify
-   * address, and that is deliberate.
+   * Search indexing. True now that siteUrl is the real domain: robots.txt
+   * allows, the noindex meta tag is gone and the sitemap is published.
    *
-   * If Google indexes the netlify.app URL, those pages do not disappear when
-   * the real domain goes live. They linger in results, compete with the real
-   * site for the same local searches, and split the ranking signal. Cleaning
-   * that up afterwards is far more work than waiting.
-   *
-   * Flip to true in the same commit that sets the real siteUrl above. That
-   * switches robots.txt from disallow to allow, drops the noindex meta tag and
-   * publishes the sitemap.
+   * It was false for as long as the site answered only on a throwaway host,
+   * because indexed pages on such a host do not disappear when the real domain
+   * goes live. They linger in results, compete for the same local searches and
+   * split the ranking signal. The same reasoning still applies to the
+   * workers.dev address the Cloudflare deploy comes with: canonical tags point
+   * here, but disabling that route in the Worker's settings is what actually
+   * stops it being crawled.
    */
-  indexable: false,
+  indexable: true,
 
   /** Confirmed by the owner: Nicolas is a native Spanish speaker. */
   speaksSpanish: true,

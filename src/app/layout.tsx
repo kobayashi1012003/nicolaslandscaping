@@ -73,7 +73,8 @@ export const metadata: Metadata = {
     icon: [{ url: '/icon-32.png', sizes: '32x32', type: 'image/png' }],
     apple: [{ url: '/icon-180.png', sizes: '180x180', type: 'image/png' }],
   },
-  // Gated on business.indexable so the temporary Netlify deploy is not indexed.
+  // Gated on business.indexable, which is what keeps a pre-launch host out of
+  // the index. See the note on that flag.
   robots: business.indexable
     ? { index: true, follow: true }
     : { index: false, follow: false, nocache: true },
