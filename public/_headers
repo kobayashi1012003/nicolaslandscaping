@@ -22,3 +22,8 @@
 # filename would otherwise stay stale in caches for the full week.
 /media/*
   Cache-Control: public, max-age=604800, must-revalidate
+
+# Self-hosted Archivo, built by scripts/build-fonts.mjs. Not content-hashed, so
+# it revalidates rather than going immutable, same policy as /media.
+/fonts/*
+  Cache-Control: public, max-age=604800, must-revalidate

@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from 'next'
-import { Archivo, Instrument_Sans } from 'next/font/google'
+import { Instrument_Sans } from 'next/font/google'
 import '@/styles/globals.css'
 import { business } from '@/lib/business'
 import { JsonLd, localBusinessSchema, websiteSchema } from '@/lib/seo'
@@ -10,25 +10,18 @@ import { PageTransition } from '@/components/PageTransition'
 import { SmoothScroll } from '@/components/SmoothScroll'
 
 /**
- * Archivo carries a width axis, which is the reason it is here. Headlines run
- * at wdth 110-118 so they read wide and structural rather than as another
- * default grotesque. Self-hosted by next/font, so there is no render-blocking
- * request to Google and no layout shift on swap.
+ * Archivo carries a width axis, which is the reason it is on the site at all.
+ * Headlines run at wdth 104-118 so they read wide and structural rather than as
+ * another default grotesque. That second axis is also what made it expensive:
+ * Google ships the whole designspace, weight 100-900 by width 62%-125%, and the
+ * latin face came to 88kb.
+ *
+ * It is no longer loaded through next/font. scripts/build-fonts.mjs narrows the
+ * axes to the range the CSS can actually reach and writes the faces into
+ * public/fonts, and src/styles/fonts.css declares them with the same
+ * unicode-ranges and the same metric-compatible fallback next/font generated.
+ * Same glyphs, same metrics, 50kb instead of 88kb.
  */
-const archivo = Archivo({
-  subsets: ['latin'],
-  axes: ['wdth'],
-  variable: '--font-archivo',
-  display: 'swap',
-  // next/font preloads by default. These two weigh about 118kb together and were
-  // being fetched at High priority in the same instant as the 93kb hero poster,
-  // splitting the connection three ways and pushing LCP out by ~260ms. The LCP
-  // element is an image, so the image gets the bandwidth. The fonts still load
-  // early off the stylesheet, and swap plus next/font's size-adjusted fallback
-  // metrics mean text is readable throughout and CLS stays at zero.
-  preload: false,
-})
-
 const instrument = Instrument_Sans({
   subsets: ['latin'],
   variable: '--font-instrument',
@@ -90,7 +83,7 @@ export const viewport: Viewport = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className={`${archivo.variable} ${instrument.variable}`}>
+    <html lang="en" className={instrument.variable}>
       <head>
         {/* The LCP preload lives on the home page, not here. Sitting in the root
             layout it fired on every route, downloading 68kb of hero poster on

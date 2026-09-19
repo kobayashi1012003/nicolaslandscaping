@@ -1,4 +1,5 @@
 @import 'tailwindcss';
+@import './fonts.css';
 
 /*
   Design tokens.
@@ -23,7 +24,9 @@
   --color-green-bright: #45954a;
   --color-water: #2f6280;
 
-  --font-display: var(--font-archivo), ui-sans-serif, system-ui, sans-serif;
+  /* Archivo is self-hosted; see fonts.css. Instrument Sans still comes from
+     next/font, which supplies --font-instrument as a generated class. */
+  --font-display: Archivo, 'Archivo Fallback', ui-sans-serif, system-ui, sans-serif;
   --font-body: var(--font-instrument), ui-sans-serif, system-ui, sans-serif;
 
   --radius-control: 6px;

@@ -7,7 +7,8 @@
     "build": "next build && node scripts/fix-export-prefetch.mjs",
     "start": "npx serve@latest out",
     "lint": "next lint",
-    "media": "node scripts/optimize-media.mjs"
+    "media": "node scripts/optimize-media.mjs",
+    "fonts": "node scripts/build-fonts.mjs"
   },
   "dependencies": {
     "@phosphor-icons/react": "^2.1.10",
@@ -24,8 +25,10 @@
     "@types/react-dom": "^19.3.0",
     "postcss": "^8.5.28",
     "sharp": "^0.35.4",
+    "subset-font": "^2.7.0",
     "tailwindcss": "^4.3.3",
     "typescript": "^7.0.2",
+    "wawoff2": "^2.0.1",
     "wrangler": "^4.133.0"
   }
 }
