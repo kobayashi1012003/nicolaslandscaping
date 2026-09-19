@@ -10,7 +10,22 @@
  * filler.
  */
 
-export const IMAGE_WIDTHS = [400, 640, 900, 1080] as const
+/**
+ * Rendition ladder. Must stay in step with WIDTHS in scripts/optimize-media.mjs.
+ *
+ * The rungs are chosen so the browser lands close to what it actually needs
+ * rather than rounding up hard. The two that matter most on a phone:
+ *
+ *   320  a gallery thumbnail is 178 CSS px in the two-column grid, which is
+ *        311 device px at the 1.75x Lighthouse emulates. The old ladder started
+ *        at 400 and overshot every one of them.
+ *   720  a full-width image is 372 CSS px, or 651 device px at 1.75x, which
+ *        cleared 640 by eleven pixels and fell all the way through to 900.
+ */
+export const IMAGE_WIDTHS = [240, 320, 400, 560, 640, 720, 900, 1080] as const
+
+/** Poster ladder. See POSTER_WIDTHS in scripts/optimize-media.mjs. */
+export const POSTER_WIDTHS = [240, 320, 400, 560, 640, 720, 800, 1080] as const
 
 export type ImageKey = keyof typeof images
 
@@ -76,11 +91,23 @@ export function fallbackSrc(name: string) {
 }
 
 export function posterSet(name: string, ext: 'avif' | 'webp' | 'jpg') {
-  return [640, 800, 1080].map((w) => `${VID}/${name}-poster-${w}.${ext} ${w}w`).join(', ')
+  return POSTER_WIDTHS.map((w) => `${VID}/${name}-poster-${w}.${ext} ${w}w`).join(', ')
 }
 
 export function posterSrc(name: string) {
-  return `${VID}/${name}-poster-1080.jpg`
+  return posterLargest(name, 'jpg')
+}
+
+/**
+ * Largest poster rendition in one format.
+ *
+ * The preload in the home page needs this in AVIF, to pair with the AVIF
+ * srcset. Deriving it from the ladder rather than writing the width out means a
+ * change to POSTER_WIDTHS cannot leave a preload pointing at a file the build
+ * no longer produces.
+ */
+export function posterLargest(name: string, ext: 'avif' | 'webp' | 'jpg') {
+  return `${VID}/${name}-poster-${POSTER_WIDTHS[POSTER_WIDTHS.length - 1]}.${ext}`
 }
 
 export function videoSrc(name: string) {

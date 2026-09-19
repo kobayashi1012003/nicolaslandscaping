@@ -96,7 +96,7 @@ export default function ServicesPage() {
                     name={key as VideoKey}
                     eager={mediaIndex === 0}
                     posterOnlyOnMobile={mediaIndex === 0}
-                    sizes="(min-width: 768px) 40vw, 100vw"
+                    sizes="(min-width: 768px) 40vw, calc(100vw - 40px)"
                     className="aspect-3/4"
                   />
                 ) : (
@@ -104,7 +104,7 @@ export default function ServicesPage() {
                     <Picture
                       name={IMAGE_FOR[key]}
                       priority={mediaIndex === 0}
-                      sizes="(min-width: 768px) 40vw, 100vw"
+                      sizes="(min-width: 768px) 40vw, calc(100vw - 40px)"
                     />
                   </figure>
                 )}

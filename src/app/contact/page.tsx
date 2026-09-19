@@ -102,7 +102,7 @@ export default function ContactPage() {
         <div className="lg:col-span-5">
           <Reveal disabled>
             <figure className="u-media aspect-3/4">
-              <Picture name="borderFinished" priority sizes="(min-width: 1024px) 38vw, 100vw" />
+              <Picture name="borderFinished" priority sizes="(min-width: 1024px) 38vw, calc(100vw - 40px)" />
             </figure>
           </Reveal>
         </div>

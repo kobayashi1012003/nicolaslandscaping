@@ -7,6 +7,20 @@ import { Picture } from '@/components/Picture'
 import { Reveal } from '@/components/Reveal'
 import { ServicesIndex } from '@/components/ServicesIndex'
 import { VideoLoop } from '@/components/VideoLoop'
+import { posterLargest, posterSet } from '@/lib/media'
+
+/**
+ * The hero poster is this page's LCP element. Its sizes string is declared once
+ * and handed to both the preload and the <img>, because the two have to agree
+ * exactly: if the preload resolves to a different rendition than the element
+ * picks, the browser downloads the poster twice.
+ *
+ * Below 768 the shell pads 20px a side, so the image is the viewport less 40px.
+ * From 768 to 1023 the padding doubles. At 1024 the hero becomes the narrow
+ * column of the split and bleeds off the right edge.
+ */
+const HERO_SIZES =
+  '(min-width: 1024px) 44vw, (min-width: 768px) calc(100vw - 80px), calc(100vw - 40px)'
 
 export const metadata: Metadata = {
   title: 'Nicolas Landscaping | Tree Trimming and Yard Work in San Diego',
@@ -26,10 +40,10 @@ export default function HomePage() {
       <link
         rel="preload"
         as="image"
-        href="/media/video/hero-poster-1080.avif"
+        href={posterLargest('hero', 'avif')}
         type="image/avif"
-        imageSrcSet="/media/video/hero-poster-640.avif 640w, /media/video/hero-poster-800.avif 800w, /media/video/hero-poster-1080.avif 1080w"
-        imageSizes="(min-width: 1024px) 44vw, calc(100vw - 40px)"
+        imageSrcSet={posterSet('hero', 'avif')}
+        imageSizes={HERO_SIZES}
         fetchPriority="high"
       />
 
@@ -60,7 +74,7 @@ export default function HomePage() {
             name="hero"
             eager
             posterOnlyOnMobile
-            sizes="(min-width: 1024px) 44vw, calc(100vw - 40px)"
+            sizes={HERO_SIZES}
             className="aspect-3/4 w-full lg:absolute lg:inset-0 lg:aspect-auto lg:h-full lg:w-[calc(100%+max(20px,(100vw-1440px)/2+64px))]"
           />
         </div>
@@ -101,38 +115,38 @@ export default function HomePage() {
           <div className="mt-12 grid grid-cols-2 gap-4 md:mt-16 md:grid-cols-12 md:gap-6">
             <Reveal className="col-span-2 md:col-span-5" index={0}>
               <figure className="u-media u-hover-zoom aspect-3/4">
-                <Picture name="crewBorder" sizes="(min-width: 768px) 40vw, 100vw" />
+                <Picture name="crewBorder" sizes="(min-width: 768px) 40vw, calc(100vw - 40px)" />
               </figure>
             </Reveal>
 
             <Reveal className="col-span-1 md:col-span-4 md:mt-16" index={1}>
               <figure className="u-media u-hover-zoom aspect-3/4">
-                <Picture name="borderFinished" sizes="(min-width: 768px) 32vw, 50vw" />
+                <Picture name="borderFinished" sizes="(min-width: 768px) 32vw, calc(50vw - 28px)" />
               </figure>
             </Reveal>
 
             <Reveal className="col-span-1 md:col-span-3 md:mt-24" index={2}>
               <VideoLoop
                 name="cleanup"
-                sizes="(min-width: 768px) 24vw, 50vw"
+                sizes="(min-width: 768px) 24vw, calc(50vw - 28px)"
                 className="aspect-3/4"
               />
             </Reveal>
 
             <Reveal className="col-span-1 md:col-span-4 md:col-start-2" index={3}>
               <figure className="u-media u-hover-zoom aspect-3/4">
-                <Picture name="borderProgress" sizes="(min-width: 768px) 32vw, 50vw" />
+                <Picture name="borderProgress" sizes="(min-width: 768px) 32vw, calc(50vw - 28px)" />
               </figure>
             </Reveal>
 
             <Reveal className="col-span-1 md:col-span-3 md:mt-12" index={4}>
               <figure className="u-media u-hover-zoom aspect-3/4">
-                <Picture name="gravelChannel" sizes="(min-width: 768px) 24vw, 50vw" />
+                <Picture name="gravelChannel" sizes="(min-width: 768px) 24vw, calc(50vw - 28px)" />
               </figure>
             </Reveal>
 
             <Reveal className="col-span-2 md:col-span-3 md:mt-24" index={5}>
-              <VideoLoop name="tree" sizes="(min-width: 768px) 24vw, 100vw" className="aspect-3/4" />
+              <VideoLoop name="tree" sizes="(min-width: 768px) 24vw, calc(100vw - 40px)" className="aspect-3/4" />
             </Reveal>
           </div>
         </div>

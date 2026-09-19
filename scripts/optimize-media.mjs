@@ -19,7 +19,16 @@ import path from 'node:path'
 const run = promisify(execFile)
 const SRC = 'media-source'
 const OUT = 'public/media'
-const WIDTHS = [400, 640, 900, 1080]
+const WIDTHS = [240, 320, 400, 560, 640, 720, 900, 1080]
+
+/**
+ * Poster ladder. Same rungs as the photos plus 800, which predates this list and
+ * is kept so no rendition that already ships disappears from a srcset.
+ *
+ * The source frames are 720x960, so 800 and 1080 are resampled rather than real
+ * detail. They are not removed, but nothing new is added above 720 either.
+ */
+const POSTER_WIDTHS = [240, 320, 400, 560, 640, 720, 800, 1080]
 
 /** One gentle grade applied to every photo so the set reads as a single shoot. */
 const GRADE = { saturation: 0.93, brightness: 1.015 }
@@ -138,7 +147,7 @@ async function buildVideo(file) {
   // The poster gets the same grade as the stills so nothing shifts on play.
   const rawPoster = path.join(dir, name + '-poster-raw.png')
   await run('ffmpeg', ['-v', 'error', '-y', '-ss', ss, '-i', file, '-frames:v', '1', rawPoster])
-  for (const w of [640, 800, 1080]) {
+  for (const w of POSTER_WIDTHS) {
     const h = Math.round((w * 4) / 3)
     const base = graded(
       sharp(rawPoster).resize(w, h, { fit: 'cover', position: sharp.strategy.attention })
