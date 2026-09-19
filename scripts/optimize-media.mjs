@@ -186,7 +186,11 @@ async function buildLogo() {
     '  lockup trimmed to ' + lm.width + 'x' + lm.height +
     ' (' + (lm.width / lm.height).toFixed(2) + ':1)'
   )
-  for (const h of [40, 80, 120, 180]) {
+  // Heights, not densities. The markup selects by width descriptor now, so
+  // these are rungs on a ladder rather than 1x/2x/3x of anything: 56 and 100
+  // exist because the bar renders the lockup 225 CSS px wide on a phone and
+  // 264 from 640 up, and the old ladder's smallest usable rung was 391.
+  for (const h of [56, 80, 100, 120, 180]) {
     await sharp(lockBuf).resize({ height: h }).png({ compressionLevel: 9 }).toFile(path.join(dir, 'lockup-' + h + '.png'))
     await sharp(lockBuf).resize({ height: h }).webp({ quality: 94 }).toFile(path.join(dir, 'lockup-' + h + '.webp'))
   }
@@ -200,7 +204,9 @@ async function buildLogo() {
     '  stacked trimmed to ' + sm.width + 'x' + sm.height +
     ' (' + (sm.width / sm.height).toFixed(2) + ':1)'
   )
-  for (const h of [120, 240, 360]) {
+  // Same reasoning as the lockup. 104 is the footer's true 1x on a phone and
+  // 200 catches the 1.75x case that used to round all the way up to 240.
+  for (const h of [104, 120, 200, 240, 360]) {
     await sharp(stackBuf).resize({ height: h }).png({ compressionLevel: 9 }).toFile(path.join(dir, 'stacked-' + h + '.png'))
     await sharp(stackBuf).resize({ height: h }).webp({ quality: 94 }).toFile(path.join(dir, 'stacked-' + h + '.webp'))
   }
