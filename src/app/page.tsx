@@ -16,11 +16,19 @@ import { posterLargest, posterSet } from '@/lib/media'
  * picks, the browser downloads the poster twice.
  *
  * Below 768 the shell pads 20px a side, so the image is the viewport less 40px.
- * From 768 to 1023 the padding doubles. At 1024 the hero becomes the narrow
- * column of the split and bleeds off the right edge.
+ * From 768 to 1023 the padding doubles.
+ *
+ * At 1024 the hero becomes the narrow column of the split. Two stops, because
+ * the column stops tracking the viewport once the shell hits its ceiling. Both
+ * are (shell - 2 x padding - 64px gap) x 0.82/1.82:
+ *
+ *   1024-1439  a fraction of the viewport, peaking at 39.98vw just under 1280,
+ *              where the padding has not yet stepped up from 40px to 64px.
+ *   1440 and up  the shell is capped, so the column is a fixed 562px and vw
+ *              would only ever over-declare it.
  */
 const HERO_SIZES =
-  '(min-width: 1024px) 44vw, (min-width: 768px) calc(100vw - 80px), calc(100vw - 40px)'
+  '(min-width: 1440px) 564px, (min-width: 1024px) 40vw, (min-width: 768px) calc(100vw - 80px), calc(100vw - 40px)'
 
 export const metadata: Metadata = {
   title: 'Nicolas Landscaping | Tree Trimming and Yard Work in San Diego',
@@ -48,7 +56,11 @@ export default function HomePage() {
       />
 
       {/* 01 Hero. Asymmetric split: the type holds the left, the portrait clip
-          runs full height on the right and bleeds off the edge. */}
+          runs full height on the right. It used to bleed to the viewport edge,
+          which left it as the one element on the site ignoring the 1440 shell
+          and pulled the whole composition off centre on a wide screen. It now
+          stops on the same line as the header, the footer and every section
+          below it; the asymmetry is carried by the column split alone. */}
       <section className="u-shell grid min-h-[100svh] grid-cols-1 items-center gap-10 pb-16 pt-[calc(var(--header-h)+40px)] lg:grid-cols-[minmax(0,1fr)_minmax(0,0.82fr)] lg:gap-16 lg:pb-24 lg:pt-[calc(var(--header-h)+24px)]">
         <div>
           <h1 className="u-display max-w-[11ch]">Trimmed, cleared, planted.</h1>
@@ -75,7 +87,7 @@ export default function HomePage() {
             eager
             deferOnMobile
             sizes={HERO_SIZES}
-            className="aspect-3/4 w-full lg:absolute lg:inset-0 lg:aspect-auto lg:h-full lg:w-[calc(100%+max(20px,(100vw-1440px)/2+64px))]"
+            className="aspect-3/4 w-full lg:absolute lg:inset-0 lg:aspect-auto lg:h-full"
           />
         </div>
       </section>
