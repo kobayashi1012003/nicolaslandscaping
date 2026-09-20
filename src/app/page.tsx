@@ -73,7 +73,7 @@ export default function HomePage() {
           <VideoLoop
             name="hero"
             eager
-            posterOnlyOnMobile
+            deferOnMobile
             sizes={HERO_SIZES}
             className="aspect-3/4 w-full lg:absolute lg:inset-0 lg:aspect-auto lg:h-full lg:w-[calc(100%+max(20px,(100vw-1440px)/2+64px))]"
           />

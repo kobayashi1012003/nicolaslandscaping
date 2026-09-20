@@ -11,21 +11,44 @@ type Props = {
   /** Hero clip. Its poster is the LCP image and is fetched at high priority. */
   eager?: boolean
   /**
-   * Skip the video entirely on phones and show only the poster.
+   * On phones, hold the clip back until the visitor has interacted.
    *
-   * Set on the hero, for two reasons. First, a video layered over the poster is
-   * its own paint, so the browser treats the moment it appears as a new Largest
-   * Contentful Paint candidate. Deferring the clip for bandwidth then pushed
-   * measured LCP out past four seconds even though the poster itself was on
-   * screen in well under a second. Second, half a megabyte of decorative loop on
-   * someone's cellular data is a poor trade for a homeowner who came to find a
-   * phone number.
+   * Set on the hero. A video layered over the poster is its own paint, so the
+   * browser treats the moment it appears as a new Largest Contentful Paint
+   * candidate, and merely deferring the clip for bandwidth pushed measured LCP
+   * out past four seconds even though the poster itself was on screen in well
+   * under a second.
    *
-   * So on phones the hero is a photograph, and the motion is a larger-screen
-   * enhancement. Clips further down the page are unaffected: they are never the
-   * LCP element and they only load once scrolled to.
+   * So wait for the moment the metric closes. Chrome stops looking for
+   * candidates at the first scroll, tap or keypress, and nothing mounted after
+   * that can displace the poster. Until then the hero is exactly the photograph
+   * it was; the loop arrives a beat later, once the phone number someone came
+   * for is already on screen.
+   *
+   * A metered or slow connection never gets it at all. Half a megabyte of
+   * decorative loop is a poor trade on someone's cellular data.
+   *
+   * Clips further down the page are unaffected: they are never the LCP element
+   * and they only load once scrolled to.
    */
-  posterOnlyOnMobile?: boolean
+  deferOnMobile?: boolean
+}
+
+/**
+ * Whether the browser reports a connection we should not spend half a megabyte
+ * of. Only Chromium ships this API, which is the right shape for the job: the
+ * answer can subtract a download but never add one, so browsers that stay quiet
+ * simply behave as they did before.
+ */
+function metered() {
+  const c = (
+    navigator as Navigator & {
+      connection?: { saveData?: boolean; effectiveType?: string }
+    }
+  ).connection
+  if (!c) return false
+  if (c.saveData) return true
+  return c.effectiveType === 'slow-2g' || c.effectiveType === '2g' || c.effectiveType === '3g'
 }
 
 /**
@@ -41,7 +64,8 @@ type Props = {
  * Loading is staged so nothing competes with the LCP image:
  *
  *   - The hero's video source is attached only after the window load event, so
- *     1.5mb of MP4 never contends with the poster it sits behind.
+ *     1.5mb of MP4 never contends with the poster it sits behind, and on a
+ *     phone not even then until the visitor scrolls or taps. See deferOnMobile.
  *   - Below-the-fold clips attach their source when they approach the viewport.
  *   - Under prefers-reduced-motion no <video> is mounted at all and no video
  *     bytes are requested. The poster is the whole story.
@@ -55,7 +79,7 @@ export function VideoLoop({
   sizes,
   className,
   eager = false,
-  posterOnlyOnMobile = false,
+  deferOnMobile = false,
 }: Props) {
   const entry = videos[name]
   const videoRef = useRef<HTMLVideoElement>(null)
@@ -63,6 +87,7 @@ export function VideoLoop({
 
   const [reduced, setReduced] = useState<boolean | null>(null)
   const [narrow, setNarrow] = useState<boolean | null>(null)
+  const [interacted, setInteracted] = useState(false)
   const [paused, setPaused] = useState(false)
   const [canLoad, setCanLoad] = useState(false)
   const [painted, setPainted] = useState(false)
@@ -77,7 +102,7 @@ export function VideoLoop({
   }, [])
 
   useEffect(() => {
-    if (!posterOnlyOnMobile) {
+    if (!deferOnMobile) {
       setNarrow(false)
       return
     }
@@ -86,9 +111,27 @@ export function VideoLoop({
     apply()
     mq.addEventListener('change', apply)
     return () => mq.removeEventListener('change', apply)
-  }, [posterOnlyOnMobile])
+  }, [deferOnMobile])
 
-  const showVideo = reduced === false && narrow === false
+  // The phone gate. A scroll or a touch is the point Chrome closes Largest
+  // Contentful Paint, so anything mounted afterwards is free. On a metered or
+  // slow connection the listeners never go on and the poster stays the whole
+  // story.
+  useEffect(() => {
+    if (narrow !== true || metered()) return
+    const events = ['scroll', 'pointerdown', 'touchstart', 'keydown'] as const
+    const off = () => {
+      for (const type of events) window.removeEventListener(type, open)
+    }
+    function open() {
+      off()
+      setInteracted(true)
+    }
+    for (const type of events) window.addEventListener(type, open, { passive: true })
+    return off
+  }, [narrow])
+
+  const showVideo = reduced === false && narrow !== null && (!narrow || interacted)
 
   // The hero waits for load so the poster wins the bandwidth race.
   useEffect(() => {
